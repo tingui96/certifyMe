@@ -1,33 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react"
+import copy from "copy-to-clipboard"
+import { extractQuestionAndOptions } from "./utils"
+import { Header } from "./components/Header"
+import { Footer } from "./components/Footer"
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [inputText, setInputText] = useState('')
+  const [result,setResult] = useState('')
+  const HandleOnChange = (e) => {
+    setInputText(e.target.value)
+  }
+  
+  const HandleOnClick = () => {
+    const { question, options } = extractQuestionAndOptions(inputText)
+    let result = "No expliques nada solo dime el numero de la opcion correcta. Lee correctamente la pregunta y las opciones, es un examen y te voy a poner a prueba \n Pregunta: " + question
+    options.forEach((option, index) => {
+    result = result + `\n Opción ${index + 1}: ${option}`;
+});
+    setResult(result)
+    setInputText('')
+  }
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Header/>
+    <div className="flex justify-center gap-4 p-10">
+      <div className="grid gap-4 p-3">
+        <textarea className="text-area"
+          id='textHtml' type='text'
+          value={inputText} onChange={HandleOnChange}/>
+        <div className="flex justify-center">
+          <button className="btn-process"
+            onClick={HandleOnClick} disabled={inputText===''}>Procesar</button>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div className="grid gap-4 p-3">
+        <textarea className="text-area"
+          id='response' readOnly type='text'
+          value={result}/>
+          <div className="flex justify-center">
+            <button className="btn-copy"
+              onClick={() => copy(result)}>Copiar</button>
+          </div>
+      </div>    
+    </div>
+    <Footer />
     </>
   )
 }
