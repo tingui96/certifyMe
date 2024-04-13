@@ -2,7 +2,6 @@ import { useState } from "react"
 import copy from "copy-to-clipboard"
 import { extractQuestionAndOptions } from "./utils"
 import { Header } from "./components/Header"
-import { Footer } from "./components/Footer"
 
 function App() {
   const [inputText, setInputText] = useState('')
@@ -43,7 +42,6 @@ function App() {
           </div>
       </div>    
     </div>
-    <Footer />
     </>
   )
 }
