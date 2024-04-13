@@ -7,7 +7,7 @@ export const Header = () => {
             <div className="flex justify-center align-middle p-4">
                 <div className="flex justify-stretch gap-10">
                     <div className="flex self-items-start">
-                        <img className="max-w-28 max-h-28 rounded-full max" src="/public/logo.jpeg"></img>
+                        <img className="max-w-28 max-h-28 rounded-full max" src="/logo.jpeg"></img>
                     </div>
                     <div className="flex justify-center items-center">
                         <div className="text text-4xl font-mono rounded-l-full text-pink-500 border-2 border-pink-500 px-2 shadow-lg">
