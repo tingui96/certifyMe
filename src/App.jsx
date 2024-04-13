@@ -2,6 +2,8 @@ import { useState } from "react"
 import copy from "copy-to-clipboard"
 import { extractQuestionAndOptions } from "./utils"
 import { Header } from "./components/Header"
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 function App() {
   const [inputText, setInputText] = useState('')
@@ -42,6 +44,8 @@ function App() {
           </div>
       </div>    
     </div>
+    <Analytics/>
+    <SpeedInsights/>
     </>
   )
 }

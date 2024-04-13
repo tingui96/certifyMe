@@ -1,6 +1,6 @@
 export const Footer = () => {
     return (
-        <div className="fixed top-4 right-10 border rounded-xl p-2" >
+        <div className="fixed top-4 left-4 border rounded-xl p-2 bg-slate-300" >
           <div className='grid justify-center justify-items-center gap-1 mb-5'>
              <h1 className="font-bold">Como Usar</h1>
              <h2 className="text-sm">* Copiar el codigo html de la prueba en Talently</h2>
