@@ -8,10 +8,10 @@
   }
 
   .btn-process {
-    @apply rounded-full shadow-lg bg-gradient-to-tr from-orange-500 to-pink-500 text-white p-2;
+    @apply shadow-lg bg-gradient-to-tr from-orange-500 to-pink-500 text-white;
   }
 
   .btn-copy {
-    @apply rounded-full shadow-lg bg-gradient-to-tr from-orange-500 to-pink-500 text-white p-2;
+    @apply shadow-lg bg-gradient-to-tr from-orange-500 to-pink-500 text-white;
   }
 }
