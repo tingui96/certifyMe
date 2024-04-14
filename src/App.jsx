@@ -4,22 +4,26 @@ import { extractQuestionAndOptions } from "./utils"
 import { Header } from "./components/Header"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Button } from "@nextui-org/react"
 
 function App() {
   const [inputText, setInputText] = useState('')
+  const [isLoading,setLoading] = useState(false)
   const [result,setResult] = useState('')
   const HandleOnChange = (e) => {
     setInputText(e.target.value)
   }
   
-  const HandleOnClick = () => {
-    const { question, options } = extractQuestionAndOptions(inputText)
+  const HandleOnClick = async () => {
+    setLoading(true)
+    const { question, options } = await extractQuestionAndOptions(inputText)
     let result = "No expliques nada solo dime el numero de la opcion correcta. Lee correctamente la pregunta y las opciones, es un examen y te voy a poner a prueba \n Pregunta: " + question
-    options.forEach((option, index) => {
+    options?.forEach((option, index) => {
     result = result + `\n Opción ${index + 1}: ${option}`;
 });
     setResult(result)
     setInputText('')
+    setLoading(false)
   }
   return (
     <>
@@ -30,8 +34,8 @@ function App() {
           id='textHtml' type='text'
           value={inputText} onChange={HandleOnChange}/>
         <div className="flex justify-center">
-          <button className="btn-process"
-            onClick={HandleOnClick} disabled={inputText===''}>Procesar</button>
+          <Button className="btn-process rounded-full" 
+            onClick={HandleOnClick} isDisabled={inputText===''} isLoading={isLoading}>Procesar</Button>
         </div>
       </div>
       <div className="grid gap-4 p-3">
@@ -39,8 +43,8 @@ function App() {
           id='response' readOnly type='text'
           value={result}/>
           <div className="flex justify-center">
-            <button className="btn-copy"
-              onClick={() => copy(result)}>Copiar</button>
+            <Button className="btn-copy rounded-full" isDisabled={result===''}
+              onClick={() => copy(result)}>Copiar</Button>
           </div>
       </div>    
     </div>
