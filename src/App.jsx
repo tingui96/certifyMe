@@ -1,6 +1,6 @@
 import { useState } from "react"
 import copy from "copy-to-clipboard"
-import { extractQuestionAndOptions } from "./utils"
+import { extractQuestion, extractOptions } from "./utils"
 import { Header } from "./components/Header"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
@@ -16,12 +16,18 @@ function App() {
   
   const HandleOnClick = async () => {
     setLoading(true)
-    const { question, options } = await extractQuestionAndOptions(inputText)
-    let result = "No expliques nada solo dime el numero de la opcion correcta. Lee correctamente la pregunta y las opciones, es un examen y te voy a poner a prueba \n Pregunta: " + question
-    options?.forEach((option, index) => {
-    result = result + `\n Opción ${index + 1}: ${option}`;
-});
-    setResult(result)
+    try{
+          const question = await extractQuestion(inputText)
+          const options = await extractOptions(inputText)
+          let result = "No expliques nada solo dime el numero de la opcion correcta. Lee correctamente la pregunta y las opciones, es un examen y te voy a poner a prueba \n Pregunta: " + question
+          options?.forEach((option, index) => {
+            result = result + `\n Opción ${index + 1}: ${option}`;
+          })
+          setResult(result)
+        }
+    catch{ err => 
+                console.log(err)
+    }
     setInputText('')
     setLoading(false)
   }
