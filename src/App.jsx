@@ -1,30 +1,38 @@
 import { useState } from "react"
 import copy from "copy-to-clipboard"
-import { extractQuestion, extractOptions } from "./utils"
+import { extractQuestion, extractOptions, Process } from "./utils"
 import { Header } from "./components/Header"
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Button } from "@nextui-org/react"
 
 function App() {
   const [inputText, setInputText] = useState('')
   const [isLoading,setLoading] = useState(false)
   const [result,setResult] = useState('')
-  const HandleOnChange = (e) => {
-    setInputText(e.target.value)
-  }
   
   const HandleOnClick = async () => {
     setLoading(true)
     try{
-          const question = await extractQuestion(inputText)
-          const options = await extractOptions(inputText)
-          let result = "No expliques nada solo dime el numero de la opcion correcta. Lee correctamente la pregunta y las opciones, es un examen y te voy a poner a prueba \n Pregunta: " + question
-          options?.forEach((option, index) => {
-            result = result + `\n Opción ${index + 1}: ${option}`;
+          let [tab] = await chrome.tabs.query({ active: true })
+          await chrome.scripting.executeScript({
+            target: { tabId : tab.id },
+            func : () => {
+              let data = { info: document.documentElement.innerHTML}; 
+              chrome.runtime.sendMessage(data);
+            }
           })
-          setResult(result)
-        }
+          await chrome.runtime.sendMessage('getInfo', async function(response) {
+             let htmltext = await response
+             const question = await extractQuestion(htmltext)
+             const options = await extractOptions(htmltext)
+             let result = "No expliques nada solo dime el numero de la opcion correcta. Lee correctamente la pregunta y las opciones, es un examen y te voy a poner a prueba \n Pregunta: " + question
+             options?.forEach((option, index) => {
+              result = result + `\n Opción ${index + 1}: ${option}`;
+              })
+           //result = await Process(result)
+            setResult(result)
+
+          });   
+    }
     catch{ err => 
                 console.log(err)
     }
@@ -33,18 +41,13 @@ function App() {
   }
   return (
     <>
-    <Header/>
-    <div className="flex justify-center gap-4 p-10">
-      <div className="grid gap-4 p-3">
-        <textarea className="text-area"
-          id='textHtml' type='text'
-          value={inputText} onChange={HandleOnChange}/>
+     <Header/>
+     <div className="flex justify-center gap-4 pl-10 pr-10">
+      <div className="grid gap-4 p-3">  
         <div className="flex justify-center">
           <Button className="btn-process rounded-full" 
-            onClick={HandleOnClick} isDisabled={inputText===''} isLoading={isLoading}>Procesar</Button>
-        </div>
-      </div>
-      <div className="grid gap-4 p-3">
+            onClick={HandleOnClick} isLoading={isLoading}>Procesar</Button>
+        </div>     
         <textarea className="text-area"
           id='response' readOnly type='text'
           value={result}/>
@@ -53,9 +56,7 @@ function App() {
               onClick={() => copy(result)}>Copiar</Button>
           </div>
       </div>    
-    </div>
-    <Analytics/>
-    <SpeedInsights/>
+    </div>  
     </>
   )
 }
