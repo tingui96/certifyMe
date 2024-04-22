@@ -5,10 +5,8 @@ export async function extractQuestion(htmlString) {
     let question = doc.querySelector('.title-question.text-xl.font-bold.leading-8').textContent.trim();
     const questionImage = doc.querySelector('[alt="question-image"]');
     if(questionImage) {
-      console.log(questionImage)
       let questionImageSrc = questionImage.getAttribute('src')
       const uploadedImageUrl = await uploadImageToCloudinary(questionImageSrc, "question");
-      console.log(uploadedImageUrl)
       question = question + '\n' + uploadedImageUrl
     }
     return question
