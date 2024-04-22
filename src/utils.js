@@ -1,19 +1,16 @@
-//import { createWorker, createScheduler } from 'tesseract.js';
 export async function extractQuestion(htmlString) {
   try{
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, 'text/html');
     let question = doc.querySelector('.title-question.text-xl.font-bold.leading-8').textContent.trim();
-
-    //const questionImage = doc.querySelector('[alt="question-image"]');
-    //if (questionImage) {
-    //  const worker = await createWorker('eng',2)
-    //
-    //  const imageResult = await worker.recognize(questionImage.getAttribute('src'))
-    //  console.log(imageResult)
-    //  question = question + ' \n' + imageResult.data.text
-    //  await worker.terminate();
-    //}
+    const questionImage = doc.querySelector('[alt="question-image"]');
+    if(questionImage) {
+      console.log(questionImage)
+      let questionImageSrc = questionImage.getAttribute('src')
+      const uploadedImageUrl = await uploadImageToCloudinary(questionImageSrc, "question");
+      console.log(uploadedImageUrl)
+      question = question + '\n' + uploadedImageUrl
+    }
     return question
   }
   catch(e) {
@@ -27,32 +24,37 @@ export async function extractOptions(htmlString) {
   try{
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, 'text/html');
-    //const scheduler = createScheduler();
-    //for (let i = 0; i < 4; i++) {
-    //  const worker = await createWorker('eng',2);
-    // 
-    //  scheduler.addWorker(worker)
-    //}
 
     let optionsNode = Array.from(doc.querySelector('#list-answers').querySelectorAll('.pl-2'))
     let options = optionsNode.map(span => span.textContent.trim())
-    //let answerImg = doc.querySelector('[alt="answer"]')
-    //if(answerImg)
-    //{
-    //  answerImg = doc.querySelectorAll('[alt="answer"]')
-    //  answerImg = answerImg.map(x => x.getAttribute('src'))
-    //  const result = await Promise.all(answerImg.map(async url => {
-    //    return scheduler.addJob('recognize', url)
-    //  }))
-    //  options = result.map(x => x.data.text)
-    //  await scheduler.terminate()
-    //}   
+    let answerImg = doc.querySelector('[alt="answer"]')
+    if(answerImg)
+    {
+      let optionsNodeImage = doc.querySelectorAll('[alt="answer"]')
+      const optionArray = []
+      for (let i = 0; i < optionsNodeImage.length; i++) {
+        const element = optionsNodeImage[i].getAttribute('src');
+        let resp = await uploadImageToCloudinary(element,"question")     
+        optionArray.push('\n' + resp)
+      }
+      return optionArray
+    }   
     return options ;
   }
-  catch (e)
-  {
-    console.log(e)
-    return ''
+
+  async function uploadImageToCloudinary(imageUrl, name) {  
+    // Enviar la solicitud de carga a Cloudinary
+    const response = await fetch(`https://cloudinary-ocr-api.onrender.com/api/cloudinary?url=${imageUrl}&name=${name}`, {
+      method: 'GET',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      }
+    });
+  
+    if (!response.ok) {
+      throw new Error('Error al subir la imagen a Cloudinary');
+    }
+  
+    const data = await response.json();
+    return data;
   }
-    
-}
