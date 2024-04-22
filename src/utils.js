@@ -21,7 +21,6 @@ export async function extractQuestion(htmlString) {
 }
 
 export async function extractOptions(htmlString) {
-  try{
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, 'text/html');
 

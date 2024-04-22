@@ -1,6 +1,6 @@
 import { useState } from "react"
 import copy from "copy-to-clipboard"
-import { extractQuestion, extractOptions, Process } from "./utils"
+import { extractQuestion, extractOptions } from "./utils"
 import { Header } from "./components/Header"
 import { Button } from "@nextui-org/react"
 
