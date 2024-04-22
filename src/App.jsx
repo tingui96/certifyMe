@@ -2,8 +2,6 @@ import { useState } from "react"
 import copy from "copy-to-clipboard"
 import { extractQuestion, extractOptions } from "./utils"
 import { Header } from "./components/Header"
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Button } from "@nextui-org/react"
 
 function App() {
@@ -54,8 +52,8 @@ function App() {
           </div>
       </div>    
     </div>
-    <Analytics/>
-    <SpeedInsights/>
+    {/*<Analytics/>
+    <SpeedInsights/>*/}
     </>
   )
 }
