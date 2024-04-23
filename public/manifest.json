@@ -1,0 +1,27 @@
+{
+    "manifest_version" : 3,
+    "name" : "CertifyMe",
+    "version" : "1.0.1",
+    "action" : {
+        "default_popup" : "index.html"
+    },
+    "icons" : {
+        "16" : "logo.png",
+        "32" : "logo.png",
+        "128" : "logo.png"
+    },
+    "background": {
+        "service_worker" :  "service_worker.js",
+        "type" : "module"
+    },
+    "permissions" : [
+        "scripting",
+        "tabs",
+        "storage",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ]
+}

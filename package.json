@@ -7,12 +7,14 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build-extension": "vite build && copy src\\manifest.json dist\\"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.10",
     "copy-to-clipboard": "^3.3.3",
     "framer-motion": "^11.0.28",
+    "openai": "^4.38.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup-plugin-polyfill-node": "^0.13.0"

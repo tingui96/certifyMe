@@ -4,7 +4,7 @@ export const Header = () => {
     return (
         <>
             
-            <div className="flex justify-center align-middle p-4">
+            <div className="flex justify-center align-middle p-3">
                 <div className="flex justify-stretch gap-10">
                     <div className="flex self-items-start">
                         <img className="max-w-28 max-h-28 rounded-full max" src="/logo.jpeg"></img>
@@ -18,7 +18,7 @@ export const Header = () => {
                         </div>
                     </div>  
                     <div className="flex items-end">
-                        <Footer />    
+                        {/*<Footer />  */}  
                     </div>
                 </div>
                        
